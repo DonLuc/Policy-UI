@@ -1,0 +1,181 @@
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="text-center pt-3" style="font-weight: 500">AVBOB Policy App</h1>
+    </div>
+    <div class="row">
+        <div class="col-xl-2 col-sm-12">
+            <button style="width: 100%" class="mb-3" mat-raised-button color="primary" (click)="isCreateMember = true">
+                Create Member
+            </button>
+            <button style="width: 100%" class="mb-3" mat-raised-button color="primary" (click)="isCreateMember = false">
+                Add Policy
+            </button>
+        </div>
+
+        <!--Create Policy Holder-->
+        <div class="col-xl-10 col-sm-12" *ngIf="isCreateMember">
+            <mat-card><mat-card-content>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <mat-card-title>Policy Holder Details</mat-card-title>
+                        <form [formGroup]="policyHolderFormGroup">
+                            <p>
+                                <mat-form-field style="width: 100%" appearance="fill">
+                                    <mat-label>ID Number</mat-label>
+                                    <input type="text" [(ngModel)]="idNumberModel" matInput placeholder="" formControlName="idNumber">
+                                </mat-form-field>
+                              </p>
+                              <p>
+                                <mat-form-field style="width: 100%" appearance="fill">
+                                    <mat-label>Initials</mat-label>
+                                    <input type="text" [(ngModel)]="initialsModel" matInput placeholder="" formControlName="initials">
+                                </mat-form-field>
+                              </p>
+                              <p>
+                                <mat-form-field style="width: 100%" appearance="fill">
+                                    <mat-label>Surname</mat-label>
+                                    <input type="text" [(ngModel)]="surnameModel" matInput placeholder="" formControlName="surname">
+                                </mat-form-field>
+                              </p>
+                              <p>
+                                <mat-form-field appearance="fill" style="width: 100%">
+                                    <mat-label>Date of Birth</mat-label>
+                                    <input matInput [(ngModel)]="dobModel" [matDatepicker]="picker" formControlName="dob">
+                                    <mat-hint>MM/DD/YYYY</mat-hint>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                  </mat-form-field>
+                              </p>
+                              <p>
+                                <mat-form-field style="width: 100%" appearance="fill">
+                                    <mat-label>Gender</mat-label>
+                                    <mat-select formControlName="gender">
+                                        <mat-option value="0">Male</mat-option>
+                                        <mat-option value="1">Female</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                              </p>
+                              <button *ngIf="!isEdit" (click)="createPolicyHolder()" style="width: 100%" class="mb-3" mat-raised-button color="accent">
+                                Create new Member
+                            </button>
+                            <button (click)="updateMember()" *ngIf="isEdit" style="width: 100%" class="mb-3" mat-raised-button color="accent">
+                                Update Member
+                            </button>
+                        </form>
+
+                    </div>  
+                    <div class="col-lg-6 col-sm-12">
+                        <mat-card-title>Policy Holders</mat-card-title>
+                    
+                        <div class="row mb-2" style="border: solid #fff 1px; padding: 5px; border-radius: 6px;" *ngFor="let policyHolder of policyHolders;">
+                            <div class="col-lg-2 col-sm-2" style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                                <mat-icon style="width: 100%; font-size: 24pt;" aria-hidden="false" aria-label="User Icon" fontIcon="person"></mat-icon>
+                            </div>
+                            <div class="col-lg-6 col-sm-12" style="padding-left: 25px">
+                                <div class="row">{{policyHolder.surname}}</div>
+                                <div class="row">{{policyHolder.idNumber}}</div>
+                            </div>
+                            <div class="col" style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                                <button color="accent" mat-stroked-button [matMenuTriggerFor]="menu">Action</button>
+                                <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="toggleUpdatePolicyHolder(policyHolder)">Update</button>
+                                <button mat-menu-item (click)="deletePolicyHolder(policyHolder.id)">Delete</button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </mat-card-content></mat-card>
+        </div>
+
+        <!--Create Policy-->
+        <div class="col-xl-10 col-sm-12" *ngIf="!isCreateMember">
+            <mat-card>
+                <mat-card-content>
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <mat-card-title>Policy Details</mat-card-title>
+                            <form  [formGroup]="policyFormGroup">
+                                <p>
+                                    <mat-form-field style="width: 100%" appearance="fill">
+                                        <mat-label>Policy Number</mat-label>
+                                        <input [(ngModel)]="policyNoModel" type="number" matInput placeholder="" formControlName="policyNumber">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field style="width: 100%" appearance="fill">
+                                        <mat-label>Policy Type</mat-label>
+                                        <mat-select formControlName="policyType">
+                                            <mat-option value="Individual Cover">Individual Cover</mat-option>
+                                            <mat-option value="Family Cover">Family Cover</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                  </p>
+                                <p>
+                                    <mat-form-field appearance="fill" style="width: 100%">
+                                        <mat-label>Commencement Date</mat-label>
+                                        <input matInput [(ngModel)]="policyStartDateModel" [matDatepicker]="picker" formControlName="startDate">
+                                        <mat-hint>MM/DD/YYYY</mat-hint>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field style="width: 100%" appearance="fill">
+                                        <mat-label>Installment</mat-label>
+                                        <input [(ngModel)]="policyInstallmentModel" type="number" matInput placeholder="" formControlName="installment">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                        <input type="file" #file placeholder="Choose file" (change)="updloadFile(file.files)">
+                                    
+                                </p>
+
+                                
+
+                                <button *ngIf="!isEditPolicy" style="width: 100%" class="mb-3" mat-raised-button color="accent" (click)="submitPolicy()">
+                                    Create new Policy
+                                </button>
+                                <button *ngIf="isEditPolicy" style="width: 100%" class="mb-3" mat-raised-button color="accent" (click)="submitPolicy()">
+                                    Update Policy
+                                </button>
+                            </form>
+
+                        </div>  
+                        <div class="col-lg-6 col-sm-12">
+                            <mat-card-title>Policies</mat-card-title>
+                        
+                            <div class="row mb-2" style="border: solid #fff 1px; padding: 5px; border-radius: 6px;" *ngFor="let policy of policies;">
+                                <div class="col-lg-2 col-sm-2" style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                                    <mat-icon style="width: 100%; font-size: 24pt;" aria-hidden="false" aria-label="User Icon" fontIcon="card_membership"></mat-icon>
+                                </div>
+                                <div class="col-lg-6 col-sm-12" style="padding-left: 25px">
+                                    <div class="row">{{policy.policyNumber}}</div>
+                                    <div class="row">{{policy.policyType}}</div>
+                                </div>
+                                <div class="col" style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                                    <button color="accent" mat-stroked-button [matMenuTriggerFor]="menu">Action</button>
+                                    <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="toggleUpdatePolicy(policy)">Update</button>
+                                    <button mat-menu-item (click)="deletePolicy(policy.id)">Delete</button>
+                                    </mat-menu>
+    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+
+
+    </div>
+
+
+
+    
+</div>
+
